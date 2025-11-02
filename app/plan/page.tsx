@@ -19,7 +19,7 @@ const Page = () => {
             .replace(/\n?```/, "")
             .trim();
 
-          const parsedPlan = JSON.parse(cleanJsonString);
+          const parsedPlan = JSON.parse(cleanJsonString || "{}");
           setPlan(parsedPlan);
         } else {
           setError("No plan data found.");
