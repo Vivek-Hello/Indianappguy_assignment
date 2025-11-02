@@ -17,7 +17,7 @@ const page = () => {
           const res = await fetch('/api/generate-plan', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data) 
           });
       
           // Check for server error
@@ -29,7 +29,7 @@ const page = () => {
       
           const plan = await res.json();
           setLoading(false);
-          localStorage.setItem('latestPlan', JSON.stringify(plan));
+          localStorage.setItem('latestPlan', JSON.stringify(plan || "{}"));
           const localplan = localStorage.getItem('latestPlan');
         
           // Use router.push correctly if in async context

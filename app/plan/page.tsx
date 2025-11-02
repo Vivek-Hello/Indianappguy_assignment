@@ -11,7 +11,7 @@ const Page = () => {
 
     if (saved) {
       try {
-        const parsedSaved = JSON.parse(saved);
+        const parsedSaved = JSON.parse(saved || "{}");
 
         if (parsedSaved.raw) {
           const cleanJsonString = parsedSaved.raw
