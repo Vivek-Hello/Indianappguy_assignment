@@ -35,7 +35,7 @@ export async function POST(req:NextRequest) {
     let plan;
     try {
       // Attempt to parse Gemini's response; fallback if not valid JSON
-      plan = JSON.parse(response.text);
+      plan = JSON.parse(response.text || "{}");
     } catch (e) {
       plan = { error: "JSON parse error", raw: response.text };
     }
