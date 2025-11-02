@@ -75,7 +75,7 @@ const Page = () => {
 
   const downloadPlan = () => {
     if (!plan) return;
-    const blob = new Blob([JSON.stringify(plan, null, 2)], {
+    const blob = new Blob([JSON.stringify(plan || "{}", null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
