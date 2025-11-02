@@ -36,16 +36,18 @@ export async function POST(req:NextRequest) {
     try {
       // Attempt to parse Gemini's response; fallback if not valid JSON
       plan = JSON.parse(response.text || "{}");
-    } catch (e) {
+    } catch (e :any) {
       plan = { error: "JSON parse error", raw: response.text };
     }
 
     return NextResponse.json(plan, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error generating plan:", error);
   
     return NextResponse.json(
-      { message: "server error", error: error?.message || error },
+      { message: "server error", error: error?.message || String(error) },
       { status: 500 }
     );
   }
+  
 }
