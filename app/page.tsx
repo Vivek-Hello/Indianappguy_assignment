@@ -1,34 +1,43 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { FaBolt, FaUtensils, FaHeadphones, FaGithub, FaRocket } from "react-icons/fa";
 
+// Types for features
+type Feature = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  color: "blue" | "green" | "purple";
+  delay: number;
+};
+
 export default function Home() {
-  // Animation variants
-  const containerVariants = {
+  // Animation variants with TypeScript strictness (no string for ease)
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        duration: 0.8
-      }
-    }
+        duration: 0.8,
+      },
+    },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: [0.42, 0, 0.58, 1],
+      },
+    },
   };
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
       opacity: 1,
@@ -36,8 +45,8 @@ export default function Home() {
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
+        ease: [0.42, 0, 0.58, 1], // Fix: must be array/cubic
+      },
     },
     hover: {
       y: -8,
@@ -45,47 +54,67 @@ export default function Home() {
       transition: {
         type: "spring",
         stiffness: 400,
-        damping: 10
-      }
-    }
+        damping: 10,
+      },
+    },
   };
 
-  const buttonVariants = {
+  const buttonVariants: Variants = {
     initial: { scale: 1 },
     hover: {
       scale: 1.05,
       transition: {
         type: "spring",
         stiffness: 400,
-        damping: 10
-      }
+        damping: 10,
+      },
     },
-    tap: { scale: 0.95 }
+    tap: { scale: 0.95 },
   };
+
+  const features: Feature[] = [
+    {
+      icon: <FaBolt />,
+      title: "Instant AI Plan",
+      description: "Get your complete fitness roadmap instantly — no trainer required!",
+      color: "blue",
+      delay: 0,
+    },
+    {
+      icon: <FaUtensils />,
+      title: "Custom Diet Tips",
+      description: "Smart meal plans tailored to your goal — from weight loss to muscle gain.",
+      color: "green",
+      delay: 0.2,
+    },
+    {
+      icon: <FaHeadphones />,
+      title: "Audio Plans",
+      description: "Listen to your plan anytime, anywhere — your coach on the go!",
+      color: "purple",
+      delay: 0.4,
+    },
+  ];
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-blue-300 to-blue-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 flex flex-col justify-between overflow-x-hidden">
-      
       {/* Hero Section */}
-      <motion.section 
+      <motion.section
         className="flex flex-col items-center justify-center text-center px-4 sm:px-6 py-16 sm:py-20 min-h-[70vh]"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div
-          variants={itemVariants}
-          className="mb-6"
-        >
+        <motion.div variants={itemVariants} className="mb-6">
           <motion.div
-            animate={{ 
+            animate={{
               rotate: [0, -5, 5, 0],
-              scale: [1, 1.1, 1]
+              scale: [1, 1.1, 1],
             }}
-            transition={{ 
+            transition={{
               duration: 2,
               repeat: Infinity,
-              repeatDelay: 3
+              repeatDelay: 3,
             }}
             className="text-6xl sm:text-7xl mb-4"
           >
@@ -93,23 +122,23 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        <motion.h1 
+        <motion.h1
           variants={itemVariants}
           className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-900 dark:text-white mb-4 sm:mb-6 leading-tight"
         >
           Transform Your{" "}
           <motion.span
             className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-            animate={{ 
-              backgroundPosition: ["0%", "100%", "0%"]
+            animate={{
+              backgroundPosition: ["0%", "100%", "0%"],
             }}
-            transition={{ 
+            transition={{
               duration: 3,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             style={{
-              backgroundSize: "200% 100%"
+              backgroundSize: "200% 100%",
             }}
           >
             Fitness Journey
@@ -117,19 +146,19 @@ export default function Home() {
           with AI
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           variants={itemVariants}
           className="text-base sm:text-lg md:text-xl text-blue-800 dark:text-blue-200 max-w-2xl mb-6 sm:mb-8 leading-relaxed px-2"
         >
           Get your personalized workout and diet plan powered by{" "}
-          <strong className="text-blue-700 dark:text-blue-300">Google Gemini</strong> — 
-          customized just for your goals.
+          <strong className="text-blue-700 dark:text-blue-300">
+            Google Gemini
+          </strong>{" "}
+          — customized just for your goals.
         </motion.p>
 
-        <motion.div
-          variants={itemVariants}
-        >
-          <motion.a 
+        <motion.div variants={itemVariants}>
+          <motion.a
             href="/chat"
             variants={buttonVariants}
             initial="initial"
@@ -156,7 +185,7 @@ export default function Home() {
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform"
               initial={{ x: "-100%" }}
               whileHover={{ x: "100%" }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
             />
           </motion.a>
         </motion.div>
@@ -178,44 +207,22 @@ export default function Home() {
       </motion.section>
 
       {/* Features Section */}
-      <motion.section 
+      <motion.section
         className="max-w-7xl mx-auto w-full px-4 sm:px-6 mb-16 sm:mb-20"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <motion.h2 
+        <motion.h2
           variants={itemVariants}
           className="text-3xl sm:text-4xl font-bold text-center text-blue-900 dark:text-white mb-12 sm:mb-16"
         >
           Why Choose AI Fitness?
         </motion.h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {[
-            {
-              icon: <FaBolt />,
-              title: "Instant AI Plan",
-              description: "Get your complete fitness roadmap instantly — no trainer required!",
-              color: "blue",
-              delay: 0
-            },
-            {
-              icon: <FaUtensils />,
-              title: "Custom Diet Tips",
-              description: "Smart meal plans tailored to your goal — from weight loss to muscle gain.",
-              color: "green",
-              delay: 0.2
-            },
-            {
-              icon: <FaHeadphones />,
-              title: "Audio Plans",
-              description: "Listen to your plan anytime, anywhere — your coach on the go!",
-              color: "purple",
-              delay: 0.4
-            }
-          ].map((feature, index) => (
+          {features.map((feature, index) => (
             <motion.div
               key={index}
               variants={cardVariants}
@@ -235,32 +242,34 @@ export default function Home() {
             >
               {/* Gradient Border Effect */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
-              
+
               <div className="relative z-10">
-                <motion.div 
+                <motion.div
                   className={`
                     text-5xl sm:text-6xl mb-4 sm:mb-6 mx-auto w-fit p-4 rounded-2xl
-                    ${feature.color === 'blue' ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : ''}
-                    ${feature.color === 'green' ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : ''}
-                    ${feature.color === 'purple' ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/20' : ''}
+                    ${feature.color === "blue" ? "text-blue-600 bg-blue-50 dark:bg-blue-900/20" : ""}
+                    ${feature.color === "green" ? "text-green-600 bg-green-50 dark:bg-green-900/20" : ""}
+                    ${feature.color === "purple" ? "text-purple-600 bg-purple-50 dark:bg-purple-900/20" : ""}
                   `}
-                  whileHover={{ 
+                  whileHover={{
                     rotate: [0, -5, 5, 0],
-                    transition: { duration: 0.5 }
+                    transition: { duration: 0.5 },
                   }}
                 >
                   {feature.icon}
                 </motion.div>
-                
-                <h3 className={`
-                  font-bold text-xl sm:text-2xl mb-3 text-center
-                  ${feature.color === 'blue' ? 'text-blue-800 dark:text-blue-300' : ''}
-                  ${feature.color === 'green' ? 'text-green-800 dark:text-green-300' : ''}
-                  ${feature.color === 'purple' ? 'text-purple-800 dark:text-purple-300' : ''}
-                `}>
+
+                <h3
+                  className={`
+                    font-bold text-xl sm:text-2xl mb-3 text-center
+                    ${feature.color === "blue" ? "text-blue-800 dark:text-blue-300" : ""}
+                    ${feature.color === "green" ? "text-green-800 dark:text-green-300" : ""}
+                    ${feature.color === "purple" ? "text-purple-800 dark:text-purple-300" : ""}
+                  `}
+                >
                   {feature.title}
                 </h3>
-                
+
                 <p className="text-gray-600 dark:text-gray-300 text-center text-sm sm:text-base leading-relaxed">
                   {feature.description}
                 </p>
@@ -271,7 +280,7 @@ export default function Home() {
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 transform"
                 initial={{ x: "-100%" }}
                 whileHover={{ x: "100%" }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
               />
             </motion.div>
           ))}
@@ -279,7 +288,7 @@ export default function Home() {
       </motion.section>
 
       {/* Footer */}
-      <motion.footer 
+      <motion.footer
         className="p-6 text-center bg-blue-50/80 dark:bg-gray-900/40 backdrop-blur-sm text-blue-900 dark:text-blue-200"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -287,7 +296,7 @@ export default function Home() {
         transition={{ duration: 0.6 }}
       >
         <div className="max-w-4xl mx-auto">
-          <motion.p 
+          <motion.p
             className="text-sm sm:text-base"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -14,8 +14,17 @@ import {
   FaStar,
   FaMagic
 } from "react-icons/fa";
+import type { Variants } from "framer-motion";
 
-const defaultFields = [
+// FIELD CONFIG
+type Field = {
+  label: string;
+  name: string;
+  type: string;
+  icon?: React.ReactNode;
+};
+
+const defaultFields: Field[] = [
   { label: "Name", name: "name", type: "text", icon: <FaUser /> },
   { label: "Age", name: "age", type: "number", icon: <FaFlag /> },
   { label: "Gender", name: "gender", type: "text", icon: <FaTransgender /> },
@@ -27,9 +36,54 @@ const defaultFields = [
   { label: "Diet Type", name: "diet", type: "text", icon: <FaUtensils /> },
 ];
 
-const ChatIntake = ({ onComplete }: { onComplete?: (data: Record<string, string>) => void }) => {
+interface ChatIntakeProps {
+  onComplete?: (data: Record<string, string>) => void;
+}
+
+// Use a Framer Motion cubic bezier for ease to avoid type errors!
+const EASE: [number, number, number, number] = [0.42, 0, 0.58, 1];
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: EASE // use cubic bezier
+    }
+  }
+};
+
+const buttonVariants: Variants = {
+  initial: { scale: 1 },
+  hover: { 
+    scale: 1.05,
+    transition: { type: "spring", stiffness: 400, damping: 10 }
+  },
+  tap: { scale: 0.95 }
+};
+
+const loadingVariants: Variants = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } }
+};
+
+const ChatIntake: React.FC<ChatIntakeProps> = ({ onComplete }) => {
   const [userInfo, setUserInfo] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -39,61 +93,10 @@ const ChatIntake = ({ onComplete }: { onComplete?: (data: Record<string, string>
     e.preventDefault();
     setLoading(true);
     console.log(userInfo);
-    
     setTimeout(() => {
       if (onComplete) onComplete(userInfo);
       setLoading(false);
     }, 1500);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const buttonVariants = {
-    initial: { scale: 1 },
-    hover: { 
-      scale: 1.05,
-      transition: { 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 10 
-      }
-    },
-    tap: { scale: 0.95 }
-  };
-
-  const loadingVariants = {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.3 }
-    },
-    exit: { 
-      opacity: 0, 
-      scale: 0.8,
-      transition: { duration: 0.2 }
-    }
   };
 
   return (
@@ -101,7 +104,7 @@ const ChatIntake = ({ onComplete }: { onComplete?: (data: Record<string, string>
       <motion.form
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: EASE }}
         className="
           w-full max-w-3xl mx-auto bg-white/90 dark:bg-gray-900/80 backdrop-blur-lg
           rounded-3xl shadow-2xl border border-blue-200 dark:border-gray-700
@@ -268,7 +271,7 @@ const ChatIntake = ({ onComplete }: { onComplete?: (data: Record<string, string>
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform"
               initial={{ x: "-100%" }}
               whileHover={{ x: "100%" }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 0.8, ease: EASE }}
             />
           </motion.button>
         </motion.div>
